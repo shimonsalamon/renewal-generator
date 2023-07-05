@@ -1,8 +1,38 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 20px;
-  padding: 20px;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+}
+
+embed {
+  height: 100%;
+  width: 100%;
+  grid-row: span 2;
+}
+
+.form-container {
+  height: 100%;
+  overflow: hidden;
+  margin: 18px 18px 0 18px;
   background-color: #f5f5f5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+}
+
+form {
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+
+}
+
+.button-container {
+  grid-row: 2;
+  padding: 12px;
 }
 
 h2 {

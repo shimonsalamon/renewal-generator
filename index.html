@@ -7,8 +7,9 @@
   <script src="https://unpkg.com/downloadjs@1.4.7"></script>
 </head>
 <body>
-  <h2>421-A Lease Renewal Generator</h2>
+  <div class="form-container">
   <form>
+    <h2>421-A Lease Renewal Generator</h2>
 
     <section>
         <div class="row">
@@ -135,8 +136,12 @@
       </div>
     </section>
     
-    <button type="button" onclick="fillForm()">Generate PDF</button>
   </form>
+</div>
+  <embed id="pdf" src="rtp-8-06-2023-fillable.pdf" type="application/pdf"  />
+  <div class="button-container">
+    <button type="button" onclick="fillForm()">Generate PDF</button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

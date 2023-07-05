@@ -161,7 +161,12 @@ async function fillForm() {
 
   const pdfBytes = await pdfDoc.save();
 
-  download(pdfBytes, "pdf-lib_form_creation_example.pdf", "application/pdf");
+  // update the UI with the new PDF 
+  document.getElementById("pdf").src = URL.createObjectURL(
+    new Blob([pdfBytes], { type: "application/pdf", name: "rtp-8-06-2023-fillable.pdf" })
+  );
+
+  // download(pdfBytes, "pdf-lib_form_creation_example.pdf", "application/pdf");
 }
 
 function formatNumber(number) {
