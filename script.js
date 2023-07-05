@@ -42,7 +42,7 @@ async function fillForm() {
   const ownerAddress2 = document.getElementById("ownerAddress2").value;
 
   const leaseExpirationDate = document.getElementById("leaseExpirationDate");
-  const currentRent = document.getElementById("currentRent").value;
+  const currentRent = Number(document.getElementById("currentRent").value);
   const preferentialRentCheckbox =
     document.getElementById("preferentialRent").checked;
   const preferentialRent = document.getElementById("lowerRent").value;
@@ -58,6 +58,23 @@ async function fillForm() {
   const sprinklerSystemCheckbox =
     document.getElementById("sprinklerSystem").checked;
   const lastInspected = document.getElementById("lastInspected").value;
+
+  // Calculate 1 year increase 3% of current rent
+  const oneYearIncreasePercent = 0.03;
+  const oneYearIncreaseAmount = currentRent * oneYearIncreasePercent;
+  const oneYearAmountTotal = currentRent + oneYearIncreaseAmount;
+
+  // Calculate 2 year for year 1 2.75% of current rent
+  const twoYearIncreasePercentYear1 = 0.0275;
+  const twoYearIncreaseAmountYear1 = currentRent * twoYearIncreasePercentYear1;
+  const twoYearAmountTotalYear1 = currentRent + twoYearIncreaseAmountYear1;
+
+  // Calculate 2 year for year 2 3.20% on top of year 1 total
+  const twoYearIncreasePercentYear2 = 0.032;
+  const twoYearIncreaseAmountYear2 =
+    twoYearAmountTotalYear1 * twoYearIncreasePercentYear2;
+  const twoYearAmountTotalYear2 =
+    twoYearAmountTotalYear1 + twoYearIncreaseAmountYear2;
 
   const formPdfBytes = await fetch("rtp-8-06-2023-fillable.pdf").then((res) =>
     res.arrayBuffer()
@@ -89,6 +106,12 @@ async function fillForm() {
   const twoYearIncreaseAmountYear1PDF = form.getTextField("undefined_7");
   const twoYearIncreaseAmountYear2PDF = form.getTextField("undefined_8");
 
+  const preferentialRentCheckboxPDF = form.getCheckBox("Check Box14");
+
+  const oneYearAmountTotalPDF = form.getTextField("undefined_6");
+  const twoYearAmountTotalYear1PDF = form.getTextField("undefined_11");
+  const twoYearAmountTotalYear2PDF = form.getTextField("undefined_12");
+
   date.setUTCHours(0, 0, 0, 0);
   date.setUTCHours(date.getUTCHours() + +4);
 
@@ -110,11 +133,42 @@ async function fillForm() {
   ownerName3PDF.setText(ownerAddress1);
   ownerName4PDF.setText(ownerAddress2);
 
+  expirationDatePDF.setText(leaseExpirationDate.value);
+
+  currentRentPDF.setText(formatNumber(currentRent));
+  oneYearIncreasePercentPDF.setText(formatNumber(oneYearIncreasePercent * 100));
+  oneYearIncreaseAmountPDF.setText(formatNumber(oneYearIncreaseAmount));
+  twoYearIncreasePercentYear1PDF.setText(
+    formatNumber(twoYearIncreasePercentYear1 * 100)
+  );
+  twoYearIncreasePercentYear2PDF.setText(
+    formatNumber(twoYearIncreasePercentYear2 * 100)
+  );
+  twoYearIncreaseAmountYear1PDF.setText(
+    formatNumber(twoYearIncreaseAmountYear1)
+  );
+  twoYearIncreaseAmountYear2PDF.setText(
+    formatNumber(twoYearIncreaseAmountYear2)
+  );
+
+  preferentialRentCheckbox ? preferentialRentCheckboxPDF.check() : preferentialRentCheckboxPDF.uncheck();
+
+  oneYearAmountTotalPDF.setText(formatNumber(oneYearAmountTotal));
+  twoYearAmountTotalYear1PDF.setText(formatNumber(twoYearAmountTotalYear1));
+  twoYearAmountTotalYear2PDF.setText(formatNumber(twoYearAmountTotalYear2));
+
   form.flatten();
 
   const pdfBytes = await pdfDoc.save();
 
   download(pdfBytes, "pdf-lib_form_creation_example.pdf", "application/pdf");
+}
+
+function formatNumber(number) {
+  return number.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 // Dated
