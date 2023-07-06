@@ -144,15 +144,22 @@
 
     </form>
   </div>
-  <embed id="pdf" src="rtp-8-06-2023-fillable.pdf" type="application/pdf" />
+  <div class="embed-container">
+    <embed id="pdf" src="rtp-8-06-2023-fillable.pdf" type="application/pdf" />
+  </div>
   <div class="button-container">
     <p class="disclaimer">By clicking this button, you acknowledge and agree that you are solely responsible for the
       accuracy and completeness of the information provided, and that you waive any right to hold the site owner liable
       for any errors, omissions, or damages resulting from the use of this service.</p>
-    <!-- <div> -->
-      <button type="button" onclick="fillForm()">Generate PDF</button>
-      <a onclick="downloadPDF()">Download PDF</a>
-    <!-- </div> -->
+    <button type="button" onclick="fillForm()">Generate PDF</button>
+    <span class="download" onclick="downloadPDF()">Download PDF</span>
+  </div>
+  <div class="copyright-container">
+    <p>&copy;
+      <script type="text/JavaScript">
+      document.write(new Date().getFullYear());
+      </script> <a href="https://www.shimonsalamon.com/" target="_blank">Shimon Salamon</a>
+    </p>
   </div>
   <script src="script.js"></script>
 </body>

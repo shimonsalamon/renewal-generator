@@ -6,21 +6,45 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr auto;
+  background-color: #f0f0f0;
+}
+
+.embed-container {
+  grid-row: span 2;
+  padding: 18px;
 }
 
 embed {
   height: 100%;
   width: 100%;
-  grid-row: span 2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
 }
 
 .form-container {
   height: 100%;
   overflow: hidden;
   margin: 18px 18px 0 18px;
-  background-color: #f5f5f5;
+  background-color: #eaeaea;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
+}
+
+.copyright-container {
+  text-align: center;
+  font-size: 14px;
+  grid-column: span 2;
+  color: #fff;
+  background-color: #35465c;
+}
+
+.copyright-container a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.copyright-container a:hover {
+  text-decoration: underline;
 }
 
 form {
@@ -121,14 +145,14 @@ button {
   font-size: 16px;
 }
 
-a {
+.download {
   color: #1a73e8;
   text-decoration: none;
   font-size: 14px;
   padding: 10px 20px;
 }
 
-a:hover {
+.download:hover {
   text-decoration: underline;
   cursor: pointer;
 }
@@ -162,7 +186,7 @@ button:hover {
     grid-template-rows: 1fr auto;
   }
 
-  embed {
+  .embed-container {
     grid-row: 3;
     display: none;
 
