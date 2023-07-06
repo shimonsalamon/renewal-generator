@@ -1,371 +1,246 @@
 // Set today's date as the default value for the date field
-var today = new Date();
-var formattedDate = today.toISOString().split("T")[0];
+const today = new Date();
+const formattedDate = today.toLocaleDateString("en-CA");
 document.getElementById("date").value = formattedDate;
 
 // Get the checkbox and related fields
-var preferentialRentCheckbox = document.getElementById("preferentialRent");
-var sprinklerSystemCheckbox = document.getElementById("sprinklerSystem");
+const preferentialRentCheckbox = document.getElementById("preferentialRent");
+const sprinklerSystemCheckbox = document.getElementById("sprinklerSystem");
 
-var lowerRentInput = document.getElementById("lowerRent");
-var lastInspectedInput = document.getElementById("lastInspected");
+const lowerRentInput = document.getElementById("lowerRent");
+const lowerRentCheckbox = document.getElementById("preferentialRider");
+const lastInspectedInput = document.getElementById("lastInspected");
 
 // Disable the related fields initially
-lowerRentInput.disabled = true;
-lastInspectedInput.disabled = true;
+disableField(lowerRentInput);
+disableField(lowerRentCheckbox);
+disableField(lastInspectedInput);
 
 // Add event listener to the checkbox
 preferentialRentCheckbox.addEventListener("change", function () {
-  // Enable/disable the related fields based on the checkbox state
-  lowerRentInput.disabled = !preferentialRentCheckbox.checked;
+  toggleFieldState(preferentialRentCheckbox.checked, lowerRentInput);
+  toggleFieldState(preferentialRentCheckbox.checked, lowerRentCheckbox);
 });
 
 // Add event listener to the checkbox
 sprinklerSystemCheckbox.addEventListener("change", function () {
-  // Enable/disable the related fields based on the checkbox state
-  lastInspectedInput.disabled = !sprinklerSystemCheckbox.checked;
+  toggleFieldState(sprinklerSystemCheckbox.checked, lastInspectedInput);
 });
 
 const { PDFDocument, rgb } = PDFLib;
 
 async function fillForm() {
-  // Get the form fields from rhe html document
-  const date = new Date(document.getElementById("date").value);
-
-  const tenantName1 = document.getElementById("tenantName1").value;
-  const tenantName2 = document.getElementById("tenantName2").value;
-  const tenantAddress1 = document.getElementById("tenantAddress1").value;
-  const tenantAddress2 = document.getElementById("tenantAddress2").value;
-
-  const ownerName = document.getElementById("ownerName").value;
-  const ownerAddress1 = document.getElementById("ownerAddress1").value;
-  const ownerAddress2 = document.getElementById("ownerAddress2").value;
-
-  const leaseExpirationDate = document.getElementById("leaseExpirationDate");
-  const currentRent = Number(document.getElementById("currentRent").value);
-  const preferentialRentCheckbox =
-    document.getElementById("preferentialRent").checked;
-  const preferentialRent = Number(document.getElementById("lowerRent").value);
-  const securityDeposit = Number(
-    document.getElementById("securityDeposit").value
+  // Get the form fields from the HTML document
+  const date = parseLocalDate(getFieldValue("date"));
+  const tenantName1 = getFieldValue("tenantName1");
+  const tenantName2 = getFieldValue("tenantName2");
+  const tenantAddress1 = getFieldValue("tenantAddress1");
+  const tenantAddress2 = getFieldValue("tenantAddress2");
+  const ownerName = getFieldValue("ownerName");
+  const ownerAddress1 = getFieldValue("ownerAddress1");
+  const ownerAddress2 = getFieldValue("ownerAddress2");
+  const leaseExpirationDate = parseLocalDate(
+    getFieldValue("leaseExpirationDate")
   );
+  const currentRent = Number(getFieldValue("currentRent"));
+  const preferentialRent = preferentialRentCheckbox.checked
+    ? Number(getFieldValue("lowerRent"))
+    : null;
+  const securityDeposit = Number(getFieldValue("securityDeposit"));
+  const airConditionerFee = Number(getFieldValue("airConditioner"));
+  const four21AFee = Number(getFieldValue("four21ACharge"));
+  const appliancesFee = Number(getFieldValue("appliances"));
+  const otherChargeName = getFieldValue("otherChargeName");
+  const otherChargeAmount = Number(getFieldValue("otherChargeAmount"));
+  const totalSeparateCharges = airConditionerFee + four21AFee + appliancesFee + otherChargeAmount;
+  const scrieDrieRent = Number(getFieldValue("scrieDrieRent"));
+  const lastInspected = sprinklerSystemCheckbox.checked
+    ? parseLocalDate(getFieldValue("lastInspected"))
+    : null;
 
-  const airConditionerFee = Number(
-    document.getElementById("airConditioner").value
-  );
-  const four21AFee = Number(document.getElementById("four21ACharge").value);
-  const appliancesFee = Number(document.getElementById("appliances").value);
-  const otherChargeName = document.getElementById("otherChargeName").value;
-  const otherChargeAmount = Number(
-    document.getElementById("otherChargeAmount").value
-  );
-
-  const scrieDrieRent = Number(document.getElementById("scrieDrieRent").value);
-  const sprinklerSystemCheckbox =
-    document.getElementById("sprinklerSystem").checked;
-  const lastInspected = document.getElementById("lastInspected").value;
-
-  // Calculate 1 year increase 3% of current rent
+  // Calculate rent increases
   const oneYearIncreasePercent = 0.03;
   const oneYearIncreaseAmount = currentRent * oneYearIncreasePercent;
   const oneYearAmountTotal = currentRent + oneYearIncreaseAmount;
 
-  // Calculate 2 year for year 1 2.75% of current rent
   const twoYearIncreasePercentYear1 = 0.0275;
   const twoYearIncreaseAmountYear1 = currentRent * twoYearIncreasePercentYear1;
   const twoYearAmountTotalYear1 = currentRent + twoYearIncreaseAmountYear1;
 
-  // Calculate 2 year for year 2 3.20% on top of year 1 total
   const twoYearIncreasePercentYear2 = 0.032;
   const twoYearIncreaseAmountYear2 =
     twoYearAmountTotalYear1 * twoYearIncreasePercentYear2;
   const twoYearAmountTotalYear2 =
     twoYearAmountTotalYear1 + twoYearIncreaseAmountYear2;
 
+  // Calculate preferential rent increases
+  const oneYearPreferentialAmountTotal = preferentialRent + (preferentialRent * oneYearIncreasePercent);
+  const twoYearPreferentialAmountTotalYear1 = preferentialRent + (preferentialRent * twoYearIncreasePercentYear1);
+  const twoYearPreferentialAmountTotalYear2 = twoYearPreferentialAmountTotalYear1 + (twoYearPreferentialAmountTotalYear1 * twoYearIncreasePercentYear2);
+
+  // Calculate total rent
+  const oneYearRent = preferentialRentCheckbox.checked ? oneYearPreferentialAmountTotal : oneYearAmountTotal;
+  const twoYearRentYear1 = preferentialRentCheckbox.checked ? twoYearPreferentialAmountTotalYear1 : twoYearAmountTotalYear1;
+  const twoYearRentYear2 = preferentialRentCheckbox.checked ? twoYearPreferentialAmountTotalYear2 : twoYearAmountTotalYear2;
+
+  // Calculate additional security deposit
+  const oneYearAdditionalSecurityDeposit = oneYearAmountTotal - securityDeposit;
+  const twoYearAdditionalSecurityDepositYear1 = twoYearAmountTotalYear1 - securityDeposit;
+  const twoYearAdditionalSecurityDepositYear2 = twoYearAmountTotalYear2 - securityDeposit - twoYearAdditionalSecurityDepositYear1;
+
+  // Calculate renewal lease dates based on leaseExpirationDate
+  const renewalStartDate = new Date(leaseExpirationDate);
+  renewalStartDate.setDate(renewalStartDate.getDate() + 1);
+
+  const renewalEndDate1Year = new Date(renewalStartDate);
+  renewalEndDate1Year.setFullYear(renewalEndDate1Year.getFullYear() + 1);
+  renewalEndDate1Year.setDate(renewalEndDate1Year.getDate() - 1);
+
+  const renewalEndDate2Year = new Date(renewalStartDate);
+  renewalEndDate2Year.setFullYear(renewalEndDate2Year.getFullYear() + 2);
+  renewalEndDate2Year.setDate(renewalEndDate2Year.getDate() - 1);
+
+  // Load the PDF form
   const formPdfBytes = await fetch("rtp-8-06-2023-fillable.pdf").then((res) =>
     res.arrayBuffer()
   );
-
   const pdfDoc = await PDFDocument.load(formPdfBytes);
   const form = pdfDoc.getForm();
 
-  const datePDF = form.getTextField("Dated");
-  const dateYearPDF = form.getTextField("20");
+  // Fill in the form fields
+  setTextFieldValue(form, "Dated", date.toLocaleDateString("en-US", { month: "long", day: "2-digit" }));
+  setTextFieldValue(form, "20", formatDate(date).slice(-2));
+  setTextFieldValue(form, "Tenants Names and Address 1", tenantName1);
+  setTextFieldValue(form, "Tenants Names and Address 2", tenantName2);
+  setTextFieldValue(form, "Tenants Names and Address 3", tenantAddress1);
+  setTextFieldValue(form, "Tenants Names and Address 4", tenantAddress2);
+  setTextFieldValue(form, "Owners Agents Name and Address 2", ownerName);
+  setTextFieldValue(form, "Owners Agents Name and Address 3", ownerAddress1);
+  setTextFieldValue(form, "Owners Agents Name and Address 4", ownerAddress2);
+  setTextFieldValue(form, "Text12", formatDate(leaseExpirationDate).replace(/\//g, String.prototype.padEnd(13)));
+  setTextFieldValue(form, "undefined_2", formatNumber(currentRent));
 
-  const tenantName1PDF = form.getTextField("Tenants Names and Address 1");
-  const tenantName2PDF = form.getTextField("Tenants Names and Address 2");
-  const tenantName3PDF = form.getTextField("Tenants Names and Address 3");
-  const tenantName4PDF = form.getTextField("Tenants Names and Address 4");
+  setTextFieldValue(form, "Text2", formatNumber(oneYearIncreasePercent * 100, 0));
+  setTextFieldValue(form, "undefined_3", formatNumber(oneYearIncreaseAmount));
+  setTextFieldValue(form, "Text3", formatNumber(twoYearIncreasePercentYear1 * 100, 0));
+  setTextFieldValue(form, "Text4", formatNumber(twoYearIncreasePercentYear2 * 100, 0));
+  setTextFieldValue(form, "undefined_7", formatNumber(twoYearIncreaseAmountYear1));
+  setTextFieldValue(form, "undefined_8", formatNumber(twoYearIncreaseAmountYear2));
 
-  const ownerName2PDF = form.getTextField("Owners Agents Name and Address 2");
-  const ownerName3PDF = form.getTextField("Owners Agents Name and Address 3");
-  const ownerName4PDF = form.getTextField("Owners Agents Name and Address 4");
+  setCheckboxValue(form, "Check Box14", preferentialRentCheckbox.checked);
+  setTextFieldValue(form, "undefined_6", formatNumber(oneYearAmountTotal));
+  setTextFieldValue(form, "undefined_11", formatNumber(twoYearAmountTotalYear1));
+  setTextFieldValue(form, "undefined_12", formatNumber(twoYearAmountTotalYear2));
 
-  const expirationDatePDF = form.getTextField("Text12");
+  setTextFieldValue(form, "Current Deposit", formatNumber(securityDeposit));
+  setTextFieldValue(form, "Additional Deposit Required  1 year lease", formatNumber(oneYearAdditionalSecurityDeposit));
+  setTextFieldValue(form, "Additional Deposit Required  2 year lease", formatNumber(twoYearAdditionalSecurityDepositYear1));
+  setTextFieldValue(form, "undefined_13", formatNumber(twoYearAdditionalSecurityDepositYear2));
 
-  const currentRentPDF = form.getTextField("undefined_2");
+  setTextFieldValue(form, "a  Air conditioner", formatNumber(airConditionerFee));
+  setTextFieldValue(form, "undefined_14", formatNumber(four21AFee));
+  setTextFieldValue(form, "undefined_15", formatNumber(appliancesFee));
+  setTextFieldValue(form, "Other", otherChargeName || "N/A");
+  setTextFieldValue(form, "undefined_16", formatNumber(otherChargeAmount));
+  setTextFieldValue(form, "Total separate charges", formatNumber(totalSeparateCharges));
 
-  const oneYearIncreasePercentPDF = form.getTextField("Text2");
-  const oneYearIncreaseAmountPDF = form.getTextField("undefined_3");
-  const twoYearIncreasePercentYear1PDF = form.getTextField("Text3");
-  const twoYearIncreasePercentYear2PDF = form.getTextField("Text4");
-  const twoYearIncreaseAmountYear1PDF = form.getTextField("undefined_7");
-  const twoYearIncreaseAmountYear2PDF = form.getTextField("undefined_8");
+  setTextFieldValue(form, "5 Different Rent to be charged if any  1 year lease", preferentialRentCheckbox.checked ? formatNumber(oneYearPreferentialAmountTotal) : "N/A");
+  setTextFieldValue(form, "2 year lease", preferentialRentCheckbox.checked ? formatNumber(twoYearPreferentialAmountTotalYear1) : "N/A");
+  setTextFieldValue(form, "undefined_17", preferentialRentCheckbox.checked ? formatNumber(twoYearPreferentialAmountTotalYear2) : "N/A");
+  setCheckboxValue(form, "Check Box1", lowerRentCheckbox.checked);
+  setCheckboxValue(form, "Check Box2", !lowerRentCheckbox.checked);
 
-  const preferentialRentCheckboxPDF = form.getCheckBox("Check Box14");
+  setTextFieldValue(form, "6 Tenant shall pay a monthly rent enter amount from 2F or 5 of", formatNumber(oneYearRent));
+  setTextFieldValue(form, "for a 1 year renewal or", formatNumber(twoYearRentYear1));
+  setTextFieldValue(form, "undefined_18", formatNumber(twoYearRentYear2));
+  setTextFieldValue(form, "for a 2 year renewal plus total separate charges enter amount from 4", formatNumber(totalSeparateCharges));
+  setTextFieldValue(form, "undefined_19", formatNumber(oneYearRent + totalSeparateCharges));
+  setTextFieldValue(form, "for a 1 year renewal  or", formatNumber(twoYearRentYear1 + totalSeparateCharges));
+  setTextFieldValue(form, "undefined_20", formatNumber(twoYearRentYear2 + totalSeparateCharges));
 
-  const oneYearAmountTotalPDF = form.getTextField("undefined_6");
-  const twoYearAmountTotalYear1PDF = form.getTextField("undefined_11");
-  const twoYearAmountTotalYear2PDF = form.getTextField("undefined_12");
+  setTextFieldValue(form, "plus", formatNumber(oneYearRent));
+  setTextFieldValue(form, "separate charges of", formatNumber(totalSeparateCharges));
+  setTextFieldValue(form, "for a total monthly payment of", formatNumber(oneYearRent + totalSeparateCharges));
+  setTextFieldValue(form, "See above explanation", formatNumber(twoYearRentYear1));
+  setTextFieldValue(form, "undefined_22", formatNumber(twoYearRentYear2));
+  setTextFieldValue(form, "plus separate charges of", formatNumber(totalSeparateCharges));
+  setTextFieldValue(form, "for a total monthly payment of_2", formatNumber(twoYearRentYear1 + totalSeparateCharges));
+  setTextFieldValue(form, "undefined_21", formatNumber(twoYearRentYear2 + totalSeparateCharges));
 
-  const currentDepositPDF = form.getTextField("Current Deposit");
-  const oneYearAdditionalDepositPDF = form.getTextField(
-    "Additional Deposit Required  1 year lease"
-  );
-  const twoYearAdditionalDepositYear1PDF = form.getTextField(
-    "Additional Deposit Required  2 year lease"
-  );
-  const twoYearAdditionalDepositYear2PDF = form.getTextField("undefined_13");
+  setTextFieldValue(form, "7 This renewal lease shall commence on", formatDate(renewalStartDate));
+  setTextFieldValue(form, "date of mailing or personal delivery of this Renewal Lease Form This Renewal Lease shall terminate on", formatDate(renewalEndDate1Year));
+  setTextFieldValue(form, "lease or", formatDate(renewalEndDate2Year));
 
-  const airConditionerFeePDF = form.getTextField("a  Air conditioner");
-  const four21AFeePDF = form.getTextField("undefined_14");
-  const appliancesFeePDF = form.getTextField("undefined_15");
-  const otherChargeNamePDF = form.getTextField("Other");
-  const otherChargeAmountPDF = form.getTextField("undefined_16");
-  const totalSeparateChargesPDF = form.getTextField("Total separate charges");
+  setTextFieldValue(form, "the amount of", (scrieDrieRent ? formatNumber(scrieDrieRent) : "N/A"));
 
-  const oneYearPreferentialRentPDF = form.getTextField(
-    "5 Different Rent to be charged if any  1 year lease"
-  );
-  const twoYearPreferentialRentYear1PDF = form.getTextField("2 year lease");
-  const twoYearPreferentialRentYear2PDF = form.getTextField("undefined_17");
-  const preferentialRiderCheckboxPDF = form.getCheckBox("Check Box1");
-  const noPreferentialRiderCheckboxPDF = form.getCheckBox("Check Box2");
-
-  const oneYearRentPDF = form.getTextField(
-    "6 Tenant shall pay a monthly rent enter amount from 2F or 5 of"
-  );
-  const twoYearRentYear1PDF = form.getTextField("for a 1 year renewal or");
-  const twoYearRentYear2PDF = form.getTextField("undefined_18");
-  const totalSeparateChargesPDF_2 = form.getTextField(
-    "for a 2 year renewal plus total separate charges enter amount from 4"
-  );
-  const totalRentFor1YearLeasePDF = form.getTextField("undefined_19");
-  const totalRentFor2YearLeaseYear1PDF = form.getTextField(
-    "for a 1 year renewal  or"
-  );
-  const totalRentFor2YearLeaseYear2PDF = form.getTextField("undefined_20");
-
-  // 7 This renewal lease shall commence on (renewal start)
-  // date of mailing or personal delivery of this Renewal Lease Form This Renewal Lease shall terminate on (renewal end 1year)
-  // lease or (renewal end 2year)
-
-  const scrieDrieRentPDF = form.getTextField("the amount of");
-
-  const sprinklerSystemCheckboxPDF = form.getCheckBox("Check Box4");
-  const noSprinklerSystemCheckboxPDF = form.getCheckBox("Check Box3");
-  const sprinklerDatePDF = form.getTextField("on");
-
-  const oneYearRentPDF_2 = form.getTextField("plus");
-  const totalSeparateChargesPDF_3 = form.getTextField("separate charges of");
-  const totalRentFor1YearLeasePDF_2 = form.getTextField(
-    "for a total monthly payment of"
-  );
-  const twoYearRentYear1PDF_2 = form.getTextField("See above explanation");
-  const twoYearRentYear2PDF_2 = form.getTextField("undefined_22");
-  const totalSeparateChargesPDF_4 = form.getTextField(
-    "plus separate charges of"
-  );
-  const totalRentFor2YearLeaseYear1PDF_2 = form.getTextField(
-    "for a total monthly payment of_2"
-  );
-  const totalRentFor2YearLeaseYear2PDF_2 = form.getTextField("undefined_21");
-
-  date.setUTCHours(0, 0, 0, 0);
-  date.setUTCHours(date.getUTCHours() + +4);
-
-  const formattedDate1 = date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "2-digit",
-  });
-
-  const formattedDate2 = date.toLocaleDateString("en-US", { year: "2-digit" });
-  datePDF.setText(formattedDate1);
-  dateYearPDF.setText(formattedDate2);
-
-  tenantName1PDF.setText(tenantName1);
-  tenantName2PDF.setText(tenantName2);
-  tenantName3PDF.setText(tenantAddress1);
-  tenantName4PDF.setText(tenantAddress2);
-
-  ownerName2PDF.setText(ownerName);
-  ownerName3PDF.setText(ownerAddress1);
-  ownerName4PDF.setText(ownerAddress2);
-
-  expirationDatePDF.setText(leaseExpirationDate.value);
-
-  currentRentPDF.setText(formatNumber(currentRent));
-  oneYearIncreasePercentPDF.setText(
-    formatNumber(oneYearIncreasePercent * 100, 0)
-  );
-  oneYearIncreaseAmountPDF.setText(formatNumber(oneYearIncreaseAmount));
-  twoYearIncreasePercentYear1PDF.setText(
-    formatNumber(twoYearIncreasePercentYear1 * 100, 0)
-  );
-  twoYearIncreasePercentYear2PDF.setText(
-    formatNumber(twoYearIncreasePercentYear2 * 100, 0)
-  );
-  twoYearIncreaseAmountYear1PDF.setText(
-    formatNumber(twoYearIncreaseAmountYear1)
-  );
-  twoYearIncreaseAmountYear2PDF.setText(
-    formatNumber(twoYearIncreaseAmountYear2)
-  );
-
-  preferentialRentCheckbox
-    ? preferentialRentCheckboxPDF.check()
-    : preferentialRentCheckboxPDF.uncheck();
-
-  oneYearAmountTotalPDF.setText(formatNumber(oneYearAmountTotal));
-  twoYearAmountTotalYear1PDF.setText(formatNumber(twoYearAmountTotalYear1));
-  twoYearAmountTotalYear2PDF.setText(formatNumber(twoYearAmountTotalYear2));
-
-  currentDepositPDF.setText(formatNumber(securityDeposit));
-  oneYearAdditionalDepositPDF.setText(
-    formatNumber(oneYearAmountTotal - securityDeposit)
-  );
-  twoYearAdditionalDepositYear1PDF.setText(
-    formatNumber(twoYearAmountTotalYear1 - securityDeposit)
-  );
-  twoYearAdditionalDepositYear2PDF.setText(
-    formatNumber(twoYearAmountTotalYear2 - securityDeposit)
-  );
-
-  airConditionerFeePDF.setText(formatNumber(airConditionerFee));
-  four21AFeePDF.setText(formatNumber(four21AFee));
-  appliancesFeePDF.setText(formatNumber(appliancesFee));
-  otherChargeNamePDF.setText(otherChargeName || "N/A");
-  otherChargeAmountPDF.setText(formatNumber(otherChargeAmount));
-  const totalSeparateCharges =
-    airConditionerFee + four21AFee + appliancesFee + otherChargeAmount;
-  totalSeparateChargesPDF.setText(formatNumber(totalSeparateCharges));
-
-  if (preferentialRentCheckbox) {
-    const oneYearPreferentialRent =
-      preferentialRent * oneYearIncreasePercent + preferentialRent;
-    const twoYearPreferentialRentYear1 =
-      preferentialRent * twoYearIncreasePercentYear1 + preferentialRent;
-    const twoYearPreferentialRentYear2 =
-      twoYearPreferentialRentYear1 * twoYearIncreasePercentYear2 +
-      twoYearPreferentialRentYear1;
-    oneYearPreferentialRentPDF.setText(formatNumber(oneYearPreferentialRent));
-    twoYearPreferentialRentYear1PDF.setText(
-      formatNumber(twoYearPreferentialRentYear1)
-    );
-    twoYearPreferentialRentYear2PDF.setText(
-      formatNumber(twoYearPreferentialRentYear2)
-    );
-    // preferentialRiderCheckboxPDF.check();
-    // noPreferentialRiderCheckboxPDF.uncheck();
-
-    oneYearRentPDF.setText(formatNumber(oneYearPreferentialRent));
-    oneYearRentPDF_2.setText(formatNumber(oneYearPreferentialRent));
-    twoYearRentYear1PDF.setText(formatNumber(twoYearPreferentialRentYear1));
-    twoYearRentYear1PDF_2.setText(formatNumber(twoYearPreferentialRentYear1));
-    twoYearRentYear2PDF.setText(formatNumber(twoYearPreferentialRentYear2));
-    twoYearRentYear2PDF_2.setText(formatNumber(twoYearPreferentialRentYear2));
-    totalRentFor1YearLeasePDF.setText(
-      formatNumber(oneYearPreferentialRent + totalSeparateCharges)
-    );
-    totalRentFor1YearLeasePDF_2.setText(
-      formatNumber(oneYearPreferentialRent + totalSeparateCharges)
-    );
-    totalRentFor2YearLeaseYear1PDF.setText(
-      formatNumber(twoYearPreferentialRentYear1 + totalSeparateCharges)
-    );
-
-    totalRentFor2YearLeaseYear1PDF_2.setText(
-      formatNumber(twoYearPreferentialRentYear1 + totalSeparateCharges)
-    );
-    totalRentFor2YearLeaseYear2PDF.setText(
-      formatNumber(twoYearPreferentialRentYear2 + totalSeparateCharges)
-    );
-    totalRentFor2YearLeaseYear2PDF_2.setText(
-      formatNumber(twoYearPreferentialRentYear2 + totalSeparateCharges)
-    );
-  } else {
-    // oneYearPreferentialRentPDF.setText(formatNumber(oneYearAmountTotal));
-    // twoYearPreferentialRentYear1PDF.setText(formatNumber(twoYearAmountTotalYear1));
-    // twoYearPreferentialRentYear2PDF.setText(formatNumber(twoYearAmountTotalYear2));
-    oneYearPreferentialRentPDF.setText("N/A");
-    twoYearPreferentialRentYear1PDF.setText("N/A");
-    twoYearPreferentialRentYear2PDF.setText("N/A");
-    preferentialRiderCheckboxPDF.uncheck();
-    noPreferentialRiderCheckboxPDF.check();
-
-    oneYearRentPDF.setText(formatNumber(oneYearAmountTotal));
-    oneYearRentPDF_2.setText(formatNumber(oneYearAmountTotal));
-    twoYearRentYear1PDF.setText(formatNumber(twoYearAmountTotalYear1));
-    twoYearRentYear1PDF_2.setText(formatNumber(twoYearAmountTotalYear1));
-    twoYearRentYear2PDF.setText(formatNumber(twoYearAmountTotalYear2));
-    twoYearRentYear2PDF_2.setText(formatNumber(twoYearAmountTotalYear2));
-    totalRentFor1YearLeasePDF.setText(
-      formatNumber(oneYearAmountTotal + totalSeparateCharges)
-    );
-    totalRentFor1YearLeasePDF_2.setText(
-      formatNumber(oneYearAmountTotal + totalSeparateCharges)
-    );
-    totalRentFor2YearLeaseYear1PDF.setText(
-      formatNumber(twoYearAmountTotalYear1 + totalSeparateCharges)
-    );
-    totalRentFor2YearLeaseYear1PDF_2.setText(
-      formatNumber(twoYearAmountTotalYear1 + totalSeparateCharges)
-    );
-    totalRentFor2YearLeaseYear2PDF.setText(
-      formatNumber(twoYearAmountTotalYear2 + totalSeparateCharges)
-    );
-    totalRentFor2YearLeaseYear2PDF_2.setText(
-      formatNumber(twoYearAmountTotalYear2 + totalSeparateCharges)
-    );
-  }
-  totalSeparateChargesPDF_2.setText(formatNumber(totalSeparateCharges));
-  totalSeparateChargesPDF_3.setText(formatNumber(totalSeparateCharges));
-  totalSeparateChargesPDF_4.setText(formatNumber(totalSeparateCharges));
-
-  scrieDrieRentPDF.setText(scrieDrieRent ? formatNumber(scrieDrieRent) : "N/A");
-
-  if (sprinklerSystemCheckbox) {
-    sprinklerSystemCheckboxPDF.check();
-    noSprinklerSystemCheckboxPDF.uncheck();
-    sprinklerDatePDF.setText(lastInspected);
-  } else {
-    sprinklerSystemCheckboxPDF.uncheck();
-    noSprinklerSystemCheckboxPDF.check();
-    sprinklerDatePDF.setText("N/A");
-  }
+  setCheckboxValue(form, "Check Box4", sprinklerSystemCheckbox.checked);
+  setCheckboxValue(form, "Check Box3", !sprinklerSystemCheckbox.checked);
+  setTextFieldValue(form, "on", sprinklerSystemCheckbox.checked ? formatDate(lastInspected) : "N/A");
 
   form.flatten();
 
+  // Save the modified PDF
   const pdfBytes = await pdfDoc.save();
 
   // update the UI with the new PDF
   document.getElementById("pdf").src = URL.createObjectURL(
     new Blob([pdfBytes], {
       type: "application/pdf",
-      name: "rtp-8-06-2023-fillable.pdf",
     })
   );
-
-  // download(pdfBytes, "pdf-lib_form_creation_example.pdf", "application/pdf");
 }
 
-function formatNumber(
-  number,
-  minimumFractionDigits = 2,
-  maximumFractionDigits = 2
-) {
-  return number.toLocaleString("en-US", {
-    minimumFractionDigits,
-    maximumFractionDigits,
-  });
+function downloadPDF() {
+  const tenantAddress = getFieldValue("tenantAddress1");
+  const ExpirationDate = getFieldValue("leaseExpirationDate");
+  const fileName = `Renewal Lease - ${tenantAddress} - ${ExpirationDate}.pdf`;
+  const pdf = document.getElementById("pdf").src;
+  download(pdf, fileName, "application/pdf");
+}
+// Utility function to disable a field
+function disableField(field) {
+  field.disabled = true;
+}
+
+// Utility function to enable/disable a field based on a checkbox state
+function toggleFieldState(checkboxState, field) {
+  field.disabled = !checkboxState;
+}
+
+// Utility function to retrieve the value of an input field
+function getFieldValue(id) {
+  return document.getElementById(id).value;
+}
+
+// Utility function to set the value of a text field in the PDF form
+function setTextFieldValue(form, fieldName, value) {
+  const textField = form.getTextField(fieldName);
+  textField.setText(value);
+}
+
+// Utility function to set the value of a checkbox in the PDF form
+function setCheckboxValue(form, fieldName, checked) {
+  const checkbox = form.getCheckBox(fieldName);
+  checked ? checkbox.check() : checkbox.uncheck();
+}
+
+// Utility function to parse a local date from a string
+function parseLocalDate(dateString) {
+  const [year, month, day] = dateString.split("-");
+  return new Date(year, month - 1, day);
+}
+
+// Utility function to format a number as a currency
+function formatNumber(number, minimumFractionDigits = 2, maximumFractionDigits = 2) {
+  return number.toLocaleString("en-US", { minimumFractionDigits, maximumFractionDigits, });
+}
+
+// Utility function to format a date as "MM/DD/YYYY"
+function formatDate(date) {
+  if (date === null || isNaN(date)) return "Invalid Date"
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${month}/${day}/${year}`;
 }

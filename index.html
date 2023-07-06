@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Lease Renewal Generator</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
   <script src="https://unpkg.com/pdf-lib@1.14.0"></script>
   <script src="https://unpkg.com/downloadjs@1.4.7"></script>
 </head>
+
 <body>
   <div class="form-container">
-  <form>
-    <h2>421-A Lease Renewal Generator</h2>
+    <form>
+      <h2>421-A Lease Renewal Generator</h2>
 
-    <section>
+      <section>
         <div class="row">
           <div class="field">
             <label for="date" class="label">Lease Date:</label>
@@ -19,130 +21,140 @@
           </div>
       </section>
 
-    <section>
-      <h3>Tenant Info</h3>
-      <div class="row">
-        <div class="field">
-          <label for="tenantName1" class="label">Name (Line 1):</label>
-          <input type="text" id="tenantName1" class="input">
+      <section>
+        <h3>Tenant Info</h3>
+        <div class="row">
+          <div class="field">
+            <label for="tenantName1" class="label">Name (Line 1):</label>
+            <input type="text" id="tenantName1" class="input">
+          </div>
+          <div class="field">
+            <label for="tenantName2" class="label">Name (Line 2):</label>
+            <input type="text" id="tenantName2" class="input">
+          </div>
         </div>
-        <div class="field">
-          <label for="tenantName2" class="label">Name (Line 2):</label>
-          <input type="text" id="tenantName2" class="input">
+        <div class="row">
+          <div class="field">
+            <label for="tenantAddress1" class="label">Address (Line 1):</label>
+            <input type="text" id="tenantAddress1" class="input">
+          </div>
+          <div class="field">
+            <label for="tenantAddress2" class="label">Address (Line 2):</label>
+            <input type="text" id="tenantAddress2" class="input">
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="field">
-          <label for="tenantAddress1" class="label">Address (Line 1):</label>
-          <input type="text" id="tenantAddress1" class="input">
+      </section>
+
+      <section>
+        <h3>Owner Info</h3>
+        <div class="row">
+          <div class="field">
+            <label for="ownerName" class="label">Owner's Name:</label>
+            <input type="text" id="ownerName" class="input">
+          </div>
+          <div class="field">
+            <label for="ownerAddress1" class="label">Address (Line 1):</label>
+            <input type="text" id="ownerAddress1" class="input">
+          </div>
+          <div class="field">
+            <label for="ownerAddress2" class="label">Address (Line 2):</label>
+            <input type="text" id="ownerAddress2" class="input">
+          </div>
         </div>
-        <div class="field">
-          <label for="tenantAddress2" class="label">Address (Line 2):</label>
-          <input type="text" id="tenantAddress2" class="input">
+      </section>
+
+      <section>
+        <h3>Lease Details</h3>
+        <div class="row">
+          <div class="field">
+            <label for="leaseExpirationDate" class="label">Current Lease Expiration Date:</label>
+            <input type="date" id="leaseExpirationDate" class="input">
+          </div>
+          <div class="field">
+            <label for="currentRent" class="label">Current Legal Rent Amount:</label>
+            <input type="number" id="currentRent" class="input">
+          </div>
+          <div class="field">
+            <label for="securityDeposit" class="label">Current Security Deposit:</label>
+            <input type="number" id="securityDeposit" class="input">
+          </div>
         </div>
-      </div>
-    </section>
-    
-    <section>
-      <h3>Owner Info</h3>
-      <div class="row">
-        <div class="field">
-          <label for="ownerName" class="label">Owner's Name:</label>
-          <input type="text" id="ownerName" class="input">
+        <div class="row">
+          <div class="field">
+            <label for="preferentialRent" class="label">Your tenant pays a Preferential Rent?</label>
+            <input type="checkbox" id="preferentialRent" class="input">
+          </div>
+          <div class="field">
+            <label for="lowerRent" class="label">Current Preferential Rent Amount:</label>
+            <input type="number" id="lowerRent" class="input" disabled>
+          </div>
+          <div class="field">
+            <label for="preferentialRider" class="label">Preferential Rider Attached?</label>
+            <input type="checkbox" id="preferentialRider" class="input" disabled>
+          </div>
         </div>
-        <div class="field">
-          <label for="ownerAddress1" class="label">Address (Line 1):</label>
-          <input type="text" id="ownerAddress1" class="input">
-        </div>    
-        <div class="field">
-          <label for="ownerAddress2" class="label">Address (Line 2):</label>
-          <input type="text" id="ownerAddress2" class="input">
+      </section>
+
+      <section>
+        <h3>Separate Charges (if any)</h3>
+        <div class="row">
+          <div class="field">
+            <label for="airConditioner" class="label">Air Conditioner:</label>
+            <input type="number" id="airConditioner" class="input">
+          </div>
+          <div class="field">
+            <label for="four21ACharge" class="label">421a (2.2%):</label>
+            <input type="number" id="four21ACharge" class="input">
+          </div>
+
+          <div class="field">
+            <label for="appliances" class="label">Appliances:</label>
+            <input type="number" id="appliances" class="input">
+          </div>
         </div>
-    </div>
-    </section>
-    
-    <section>
-      <h3>Lease Details</h3>
-      <div class="row">
-        <div class="field">
-          <label for="leaseExpirationDate" class="label">Current Lease Expiration Date:</label>
-          <input type="date" id="leaseExpirationDate" class="input">
+        <div class="row">
+          <div class="field">
+            <label for="otherChargeName" class="label">Other (name):</label>
+            <input type="text" id="otherChargeName" class="input">
+          </div>
+          <div class="field">
+            <label for="otherChargeAmount" class="label">Other (amount):</label>
+            <input type="number" id="otherChargeAmount" class="input">
+          </div>
         </div>
-        <div class="field">
-          <label for="currentRent" class="label">Current Legal Rent Amount:</label>
-          <input type="number" id="currentRent" class="input">
+      </section>
+
+      <section>
+        <h3>Additional Details</h3>
+        <div class="row">
+          <div class="field">
+            <label for="scrieDrieRent" class="label">Lower SCRIE or DRIE Rent (if any):</label>
+            <input type="text" id="scrieDrieRent" class="input">
+          </div>
+          <div class="field">
+            <label for="sprinklerSystem" class="label">Does your property have a sprinkler?</label>
+            <input type="checkbox" id="sprinklerSystem" class="input">
+          </div>
+          <div class="field">
+            <label for="lastInspected" class="label">Last Inspected:</label>
+            <input type="date" id="lastInspected" class="input" disabled>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="field">
-          <label for="preferentialRent" class="label">Your tenant pays a Preferential Rent?</label>
-          <input type="checkbox" id="preferentialRent" class="input">
-        </div>
-        <div class="field">
-          <label for="lowerRent" class="label">Current Preferential Rent Amount:</label>
-          <input type="number" id="lowerRent" class="input" disabled>
-        </div>
-        <div class="field">
-          <label for="securityDeposit" class="label">Current Security Deposit:</label>
-          <input type="number" id="securityDeposit" class="input">
-        </div>
-      </div>
-    </section>
-    
-    <section>
-      <h3>Separate Charges (if any)</h3>
-      <div class="row">
-        <div class="field">
-          <label for="airConditioner" class="label">Air Conditioner:</label>
-          <input type="number" id="airConditioner" class="input">
-        </div>
-        <div class="field">
-          <label for="four21ACharge" class="label">421a (2.2%):</label>
-          <input type="number" id="four21ACharge" class="input">
-        </div>
-      
-        <div class="field">
-          <label for="appliances" class="label">Appliances:</label>
-          <input type="number" id="appliances" class="input">
-        </div>
-    </div>
-    <div class="row">
-        <div class="field">
-          <label for="otherChargeName" class="label">Other (name):</label>
-          <input type="text" id="otherChargeName" class="input">
-        </div>
-        <div class="field">
-          <label for="otherChargeAmount" class="label">Other (amount):</label>
-          <input type="number" id="otherChargeAmount" class="input">
-        </div>
-      </div>
-    </section>
-    
-    <section>
-      <h3>Additional Details</h3>
-      <div class="row">
-        <div class="field">
-          <label for="scrieDrieRent" class="label">Lower SCRIE or DRIE Rent (if any):</label>
-          <input type="text" id="scrieDrieRent" class="input">
-        </div>
-        <div class="field">
-          <label for="sprinklerSystem" class="label">Does your property have a sprinkler?</label>
-          <input type="checkbox" id="sprinklerSystem" class="input">
-        </div>
-        <div class="field">
-          <label for="lastInspected" class="label">Last Inspected:</label>
-          <input type="date" id="lastInspected" class="input" disabled>
-        </div>
-      </div>
-    </section>
-    
-  </form>
-</div>
-  <embed id="pdf" src="rtp-8-06-2023-fillable.pdf" type="application/pdf"  />
+      </section>
+
+    </form>
+  </div>
+  <embed id="pdf" src="rtp-8-06-2023-fillable.pdf" type="application/pdf" />
   <div class="button-container">
-    <p class="disclaimer">By clicking this button, you acknowledge and agree that you are solely responsible for the accuracy and completeness of the information provided, and that you waive any right to hold the site owner liable for any errors, omissions, or damages resulting from the use of this service.</p>
-    <button type="button" onclick="fillForm()">Generate PDF</button>
+    <p class="disclaimer">By clicking this button, you acknowledge and agree that you are solely responsible for the
+      accuracy and completeness of the information provided, and that you waive any right to hold the site owner liable
+      for any errors, omissions, or damages resulting from the use of this service.</p>
+    <!-- <div> -->
+      <button type="button" onclick="fillForm()">Generate PDF</button>
+      <a onclick="downloadPDF()">Download PDF</a>
+    <!-- </div> -->
   </div>
   <script src="script.js"></script>
 </body>
+
 </html>
