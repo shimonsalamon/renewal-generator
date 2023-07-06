@@ -1,12 +1,12 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
   height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr auto;
-  background-color: #f0f0f0;
+  background-color: #fafafa;
 }
 
 .embed-container {
@@ -25,9 +25,10 @@ embed {
   height: 100%;
   overflow: hidden;
   margin: 18px 18px 0 18px;
-  background-color: #eaeaea;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* background-color: #eaeaea;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
   border-radius: 16px;
+  border: rgba(0, 0, 0, 0.2) solid 1px;
 }
 
 .copyright-container {
@@ -61,6 +62,9 @@ form {
 
 h2 {
   text-align: center;
+  font-weight: 400;
+  
+  color: #000000de;
 }
 
 section {
@@ -68,7 +72,7 @@ section {
   padding: 20px;
   background-color: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: rgba(0, 0, 0, 0.2) solid 1px;
   max-width: 850px;
   margin-left: auto;
   margin-right: auto;
@@ -77,6 +81,8 @@ section {
 h3 {
   margin-top: 0;
   margin-bottom: 12px;
+  font-weight: 500;
+  color: #000000de;
 }
 
 .row {
@@ -94,18 +100,32 @@ h3 {
 .label {
   padding-right: 10px;
   text-align: right;
-  line-height: 22px;
+  line-height: 18px;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 12px;
+  color: #0009;
 }
 
 .input:not([type="checkbox"]) {
   width: 100%;
   padding: 6px;
-  border-radius: 6px;
+  border-radius: 4px 4px 0 0;
   height: 40px;
-  border: 1px solid #ccc;
+  border: none;
+  border-bottom: 1px solid #8b8b8b;
   box-sizing: border-box;
+  background-color: #0000000a;
+}
+
+.input:not([type="checkbox"]):focus {
+  border-bottom: 2px solid #35465c;
+  outline: none;
+}
+
+.input:not([type="checkbox"]):disabled {
+  border: none;
+  color: #00000061;
+  background-color: #00000005;
 }
 
 .input[type="checkbox"] {
