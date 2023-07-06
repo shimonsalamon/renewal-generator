@@ -194,8 +194,20 @@ function downloadPDF() {
   const tenantAddress = getFieldValue("tenantAddress1");
   const ExpirationDate = getFieldValue("leaseExpirationDate");
   const fileName = `Renewal Lease - ${tenantAddress} - ${ExpirationDate}.pdf`;
-  const pdf = document.getElementById("pdf").src;
-  download(pdf, fileName, "application/pdf");
+  const pdfUrl = document.getElementById("pdf").src;
+  fetch(pdfUrl)
+    .then(response => response.blob())
+    .then(blob => {
+      const blobUrl = URL.createObjectURL(blob);
+
+      const anchorElement = document.createElement('a');
+      anchorElement.href = blobUrl;
+      anchorElement.download = fileName;
+      anchorElement.type = 'application/pdf';
+      anchorElement.click();
+
+      URL.revokeObjectURL(blobUrl);
+    });
 }
 // Utility function to disable a field
 function disableField(field) {
