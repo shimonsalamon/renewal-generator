@@ -103,6 +103,14 @@ h3 {
   margin-top: 20px;
 }
 
+.disclaimer {
+  font-size: 12px;
+  text-align: center;
+  text-align: justify;
+  padding: 8px 20px;
+  color: #646464;
+}
+
 button {
   padding: 10px 20px;
   background-color: #4CAF50;

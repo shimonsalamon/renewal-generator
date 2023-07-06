@@ -45,16 +45,22 @@ async function fillForm() {
   const currentRent = Number(document.getElementById("currentRent").value);
   const preferentialRentCheckbox =
     document.getElementById("preferentialRent").checked;
-  const preferentialRent = document.getElementById("lowerRent").value;
-  const securityDeposit = document.getElementById("securityDeposit").value;
+  const preferentialRent = Number(document.getElementById("lowerRent").value);
+  const securityDeposit = Number(
+    document.getElementById("securityDeposit").value
+  );
 
-  const airConditionerFee = document.getElementById("airConditioner").value;
-  const four21AFee = document.getElementById("four21ACharge").value;
-  const appliancesFee = document.getElementById("appliances").value;
+  const airConditionerFee = Number(
+    document.getElementById("airConditioner").value
+  );
+  const four21AFee = Number(document.getElementById("four21ACharge").value);
+  const appliancesFee = Number(document.getElementById("appliances").value);
   const otherChargeName = document.getElementById("otherChargeName").value;
-  const otherChargeAmount = document.getElementById("otherChargeAmount").value;
+  const otherChargeAmount = Number(
+    document.getElementById("otherChargeAmount").value
+  );
 
-  const scrieDrieRent = document.getElementById("scrieDrieRent").value;
+  const scrieDrieRent = Number(document.getElementById("scrieDrieRent").value);
   const sprinklerSystemCheckbox =
     document.getElementById("sprinklerSystem").checked;
   const lastInspected = document.getElementById("lastInspected").value;
@@ -112,6 +118,69 @@ async function fillForm() {
   const twoYearAmountTotalYear1PDF = form.getTextField("undefined_11");
   const twoYearAmountTotalYear2PDF = form.getTextField("undefined_12");
 
+  const currentDepositPDF = form.getTextField("Current Deposit");
+  const oneYearAdditionalDepositPDF = form.getTextField(
+    "Additional Deposit Required  1 year lease"
+  );
+  const twoYearAdditionalDepositYear1PDF = form.getTextField(
+    "Additional Deposit Required  2 year lease"
+  );
+  const twoYearAdditionalDepositYear2PDF = form.getTextField("undefined_13");
+
+  const airConditionerFeePDF = form.getTextField("a  Air conditioner");
+  const four21AFeePDF = form.getTextField("undefined_14");
+  const appliancesFeePDF = form.getTextField("undefined_15");
+  const otherChargeNamePDF = form.getTextField("Other");
+  const otherChargeAmountPDF = form.getTextField("undefined_16");
+  const totalSeparateChargesPDF = form.getTextField("Total separate charges");
+
+  const oneYearPreferentialRentPDF = form.getTextField(
+    "5 Different Rent to be charged if any  1 year lease"
+  );
+  const twoYearPreferentialRentYear1PDF = form.getTextField("2 year lease");
+  const twoYearPreferentialRentYear2PDF = form.getTextField("undefined_17");
+  const preferentialRiderCheckboxPDF = form.getCheckBox("Check Box1");
+  const noPreferentialRiderCheckboxPDF = form.getCheckBox("Check Box2");
+
+  const oneYearRentPDF = form.getTextField(
+    "6 Tenant shall pay a monthly rent enter amount from 2F or 5 of"
+  );
+  const twoYearRentYear1PDF = form.getTextField("for a 1 year renewal or");
+  const twoYearRentYear2PDF = form.getTextField("undefined_18");
+  const totalSeparateChargesPDF_2 = form.getTextField(
+    "for a 2 year renewal plus total separate charges enter amount from 4"
+  );
+  const totalRentFor1YearLeasePDF = form.getTextField("undefined_19");
+  const totalRentFor2YearLeaseYear1PDF = form.getTextField(
+    "for a 1 year renewal  or"
+  );
+  const totalRentFor2YearLeaseYear2PDF = form.getTextField("undefined_20");
+
+  // 7 This renewal lease shall commence on (renewal start)
+  // date of mailing or personal delivery of this Renewal Lease Form This Renewal Lease shall terminate on (renewal end 1year)
+  // lease or (renewal end 2year)
+
+  const scrieDrieRentPDF = form.getTextField("the amount of");
+
+  const sprinklerSystemCheckboxPDF = form.getCheckBox("Check Box4");
+  const noSprinklerSystemCheckboxPDF = form.getCheckBox("Check Box3");
+  const sprinklerDatePDF = form.getTextField("on");
+
+  const oneYearRentPDF_2 = form.getTextField("plus");
+  const totalSeparateChargesPDF_3 = form.getTextField("separate charges of");
+  const totalRentFor1YearLeasePDF_2 = form.getTextField(
+    "for a total monthly payment of"
+  );
+  const twoYearRentYear1PDF_2 = form.getTextField("See above explanation");
+  const twoYearRentYear2PDF_2 = form.getTextField("undefined_22");
+  const totalSeparateChargesPDF_4 = form.getTextField(
+    "plus separate charges of"
+  );
+  const totalRentFor2YearLeaseYear1PDF_2 = form.getTextField(
+    "for a total monthly payment of_2"
+  );
+  const totalRentFor2YearLeaseYear2PDF_2 = form.getTextField("undefined_21");
+
   date.setUTCHours(0, 0, 0, 0);
   date.setUTCHours(date.getUTCHours() + +4);
 
@@ -136,13 +205,15 @@ async function fillForm() {
   expirationDatePDF.setText(leaseExpirationDate.value);
 
   currentRentPDF.setText(formatNumber(currentRent));
-  oneYearIncreasePercentPDF.setText(formatNumber(oneYearIncreasePercent * 100));
+  oneYearIncreasePercentPDF.setText(
+    formatNumber(oneYearIncreasePercent * 100, 0)
+  );
   oneYearIncreaseAmountPDF.setText(formatNumber(oneYearIncreaseAmount));
   twoYearIncreasePercentYear1PDF.setText(
-    formatNumber(twoYearIncreasePercentYear1 * 100)
+    formatNumber(twoYearIncreasePercentYear1 * 100, 0)
   );
   twoYearIncreasePercentYear2PDF.setText(
-    formatNumber(twoYearIncreasePercentYear2 * 100)
+    formatNumber(twoYearIncreasePercentYear2 * 100, 0)
   );
   twoYearIncreaseAmountYear1PDF.setText(
     formatNumber(twoYearIncreaseAmountYear1)
@@ -151,102 +222,150 @@ async function fillForm() {
     formatNumber(twoYearIncreaseAmountYear2)
   );
 
-  preferentialRentCheckbox ? preferentialRentCheckboxPDF.check() : preferentialRentCheckboxPDF.uncheck();
+  preferentialRentCheckbox
+    ? preferentialRentCheckboxPDF.check()
+    : preferentialRentCheckboxPDF.uncheck();
 
   oneYearAmountTotalPDF.setText(formatNumber(oneYearAmountTotal));
   twoYearAmountTotalYear1PDF.setText(formatNumber(twoYearAmountTotalYear1));
   twoYearAmountTotalYear2PDF.setText(formatNumber(twoYearAmountTotalYear2));
 
+  currentDepositPDF.setText(formatNumber(securityDeposit));
+  oneYearAdditionalDepositPDF.setText(
+    formatNumber(oneYearAmountTotal - securityDeposit)
+  );
+  twoYearAdditionalDepositYear1PDF.setText(
+    formatNumber(twoYearAmountTotalYear1 - securityDeposit)
+  );
+  twoYearAdditionalDepositYear2PDF.setText(
+    formatNumber(twoYearAmountTotalYear2 - securityDeposit)
+  );
+
+  airConditionerFeePDF.setText(formatNumber(airConditionerFee));
+  four21AFeePDF.setText(formatNumber(four21AFee));
+  appliancesFeePDF.setText(formatNumber(appliancesFee));
+  otherChargeNamePDF.setText(otherChargeName || "N/A");
+  otherChargeAmountPDF.setText(formatNumber(otherChargeAmount));
+  const totalSeparateCharges =
+    airConditionerFee + four21AFee + appliancesFee + otherChargeAmount;
+  totalSeparateChargesPDF.setText(formatNumber(totalSeparateCharges));
+
+  if (preferentialRentCheckbox) {
+    const oneYearPreferentialRent =
+      preferentialRent * oneYearIncreasePercent + preferentialRent;
+    const twoYearPreferentialRentYear1 =
+      preferentialRent * twoYearIncreasePercentYear1 + preferentialRent;
+    const twoYearPreferentialRentYear2 =
+      twoYearPreferentialRentYear1 * twoYearIncreasePercentYear2 +
+      twoYearPreferentialRentYear1;
+    oneYearPreferentialRentPDF.setText(formatNumber(oneYearPreferentialRent));
+    twoYearPreferentialRentYear1PDF.setText(
+      formatNumber(twoYearPreferentialRentYear1)
+    );
+    twoYearPreferentialRentYear2PDF.setText(
+      formatNumber(twoYearPreferentialRentYear2)
+    );
+    // preferentialRiderCheckboxPDF.check();
+    // noPreferentialRiderCheckboxPDF.uncheck();
+
+    oneYearRentPDF.setText(formatNumber(oneYearPreferentialRent));
+    oneYearRentPDF_2.setText(formatNumber(oneYearPreferentialRent));
+    twoYearRentYear1PDF.setText(formatNumber(twoYearPreferentialRentYear1));
+    twoYearRentYear1PDF_2.setText(formatNumber(twoYearPreferentialRentYear1));
+    twoYearRentYear2PDF.setText(formatNumber(twoYearPreferentialRentYear2));
+    twoYearRentYear2PDF_2.setText(formatNumber(twoYearPreferentialRentYear2));
+    totalRentFor1YearLeasePDF.setText(
+      formatNumber(oneYearPreferentialRent + totalSeparateCharges)
+    );
+    totalRentFor1YearLeasePDF_2.setText(
+      formatNumber(oneYearPreferentialRent + totalSeparateCharges)
+    );
+    totalRentFor2YearLeaseYear1PDF.setText(
+      formatNumber(twoYearPreferentialRentYear1 + totalSeparateCharges)
+    );
+
+    totalRentFor2YearLeaseYear1PDF_2.setText(
+      formatNumber(twoYearPreferentialRentYear1 + totalSeparateCharges)
+    );
+    totalRentFor2YearLeaseYear2PDF.setText(
+      formatNumber(twoYearPreferentialRentYear2 + totalSeparateCharges)
+    );
+    totalRentFor2YearLeaseYear2PDF_2.setText(
+      formatNumber(twoYearPreferentialRentYear2 + totalSeparateCharges)
+    );
+  } else {
+    // oneYearPreferentialRentPDF.setText(formatNumber(oneYearAmountTotal));
+    // twoYearPreferentialRentYear1PDF.setText(formatNumber(twoYearAmountTotalYear1));
+    // twoYearPreferentialRentYear2PDF.setText(formatNumber(twoYearAmountTotalYear2));
+    oneYearPreferentialRentPDF.setText("N/A");
+    twoYearPreferentialRentYear1PDF.setText("N/A");
+    twoYearPreferentialRentYear2PDF.setText("N/A");
+    preferentialRiderCheckboxPDF.uncheck();
+    noPreferentialRiderCheckboxPDF.check();
+
+    oneYearRentPDF.setText(formatNumber(oneYearAmountTotal));
+    oneYearRentPDF_2.setText(formatNumber(oneYearAmountTotal));
+    twoYearRentYear1PDF.setText(formatNumber(twoYearAmountTotalYear1));
+    twoYearRentYear1PDF_2.setText(formatNumber(twoYearAmountTotalYear1));
+    twoYearRentYear2PDF.setText(formatNumber(twoYearAmountTotalYear2));
+    twoYearRentYear2PDF_2.setText(formatNumber(twoYearAmountTotalYear2));
+    totalRentFor1YearLeasePDF.setText(
+      formatNumber(oneYearAmountTotal + totalSeparateCharges)
+    );
+    totalRentFor1YearLeasePDF_2.setText(
+      formatNumber(oneYearAmountTotal + totalSeparateCharges)
+    );
+    totalRentFor2YearLeaseYear1PDF.setText(
+      formatNumber(twoYearAmountTotalYear1 + totalSeparateCharges)
+    );
+    totalRentFor2YearLeaseYear1PDF_2.setText(
+      formatNumber(twoYearAmountTotalYear1 + totalSeparateCharges)
+    );
+    totalRentFor2YearLeaseYear2PDF.setText(
+      formatNumber(twoYearAmountTotalYear2 + totalSeparateCharges)
+    );
+    totalRentFor2YearLeaseYear2PDF_2.setText(
+      formatNumber(twoYearAmountTotalYear2 + totalSeparateCharges)
+    );
+  }
+  totalSeparateChargesPDF_2.setText(formatNumber(totalSeparateCharges));
+  totalSeparateChargesPDF_3.setText(formatNumber(totalSeparateCharges));
+  totalSeparateChargesPDF_4.setText(formatNumber(totalSeparateCharges));
+
+  scrieDrieRentPDF.setText(scrieDrieRent ? formatNumber(scrieDrieRent) : "N/A");
+
+  if (sprinklerSystemCheckbox) {
+    sprinklerSystemCheckboxPDF.check();
+    noSprinklerSystemCheckboxPDF.uncheck();
+    sprinklerDatePDF.setText(lastInspected);
+  } else {
+    sprinklerSystemCheckboxPDF.uncheck();
+    noSprinklerSystemCheckboxPDF.check();
+    sprinklerDatePDF.setText("N/A");
+  }
+
   form.flatten();
 
   const pdfBytes = await pdfDoc.save();
 
-  // update the UI with the new PDF 
+  // update the UI with the new PDF
   document.getElementById("pdf").src = URL.createObjectURL(
-    new Blob([pdfBytes], { type: "application/pdf", name: "rtp-8-06-2023-fillable.pdf" })
+    new Blob([pdfBytes], {
+      type: "application/pdf",
+      name: "rtp-8-06-2023-fillable.pdf",
+    })
   );
 
   // download(pdfBytes, "pdf-lib_form_creation_example.pdf", "application/pdf");
 }
 
-function formatNumber(number) {
+function formatNumber(
+  number,
+  minimumFractionDigits = 2,
+  maximumFractionDigits = 2
+) {
   return number.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits,
+    maximumFractionDigits,
   });
 }
-
-// Dated
-// 20 (year ex: 23)
-
-// Tenants Names and Address 1
-// Tenants Names and Address 2
-// Tenants Names and Address 3
-// Tenants Names and Address 4
-
-// Owners Agents Name and Address 1
-// Owners Agents Name and Address 2
-// Owners Agents Name and Address 3
-// Owners Agents Name and Address 3
-
-// Text12 (expiration date is that field)
-
-// undefined_2 (current legal rent amount)
-
-// Text2  (1Year increase %)
-// undefined_3 (1Year increase amount)
-// Text3 (2Year increase % year 1)
-// Text4 (2Year increase % year 2)
-// undefined_7 (2Year increase amount year 1)
-// undefined_8 (2Year increase amount year 2)
-
-// Check Box14 (is there a prefrntail rent?)
-
-// undefined_6 (1Year total new rent)
-// undefined_11 (2Year total new rent year 1)
-// undefined_12 (2Year total new rent year 2)
-
-// Current Deposit
-// Additional Deposit Required  1 year lease
-// Additional Deposit Required  2 year lease (year 1)
-// undefined_13 (2Year additional deposit year 2)
-
-// a  Air conditioner
-// undefined_14 (421a 2.2%)
-// undefined_15 (appliances fee)
-// Other (other seprae charge - enter type)
-// undefined_16 (other seprae charge - enter amount)
-// Total separate charges
-
-// 5 Different Rent to be charged if any  1 year lease
-// 2 year lease
-// undefined_17 (lower rent to be charged on 2 year lease year 2)
-// Check Box1 (if you provide a prefrantial rider - checked if yes)
-// Check Box2 (if you provide a prefrantial rider - checked if no)
-
-// 6 Tenant shall pay a monthly rent enter amount from 2F or 5 of (monthly rent for 1 year lease)
-// for a 1 year renewal or (monthly rent for 2 year lease year 1)
-// undefined_18 (monthly rent for 2 year lease year 2)
-// for a 2 year renewal plus total separate charges enter amount from 4 (total separate charges)
-// undefined_19 (total rent to be paid for a 1 year lease)
-// for a 1 year renewal  or (total rent to be paid for a 2 year lease - Year 1)
-// undefined_20 (total rent to be paid for a 2 year lease - Year 2)
-
-// 7 This renewal lease shall commence on (renewal start)
-// date of mailing or personal delivery of this Renewal Lease Form This Renewal Lease shall terminate on (renewal end 1year)
-// lease or (renewal end 2year)
-
-// the amount of (SCRIE or DRIE amount tenant will actully pays)
-
-// Check Box4 (checked if have a splrinkler)
-// Check Box4 (checked if not have a splrinkler)
-// on (last sprinkler inspection date)
-
-// plus (monthly rent for 1 year lease)
-// separate charges of (total separate charges)
-// for a total monthly payment of (total rent to be paid for a 1 year lease)
-// See above explanation (monthly rent for 2 year lease year 1)
-// undefined_22 (monthly rent for 2 year lease year 2)
-// plus separate charges of (total separate charges)
-// for a total monthly payment of_2 (total rent to be paid for a 2 year lease - Year 1)
-// undefined_21 (total rent to be paid for a 2 year lease - Year 2)
