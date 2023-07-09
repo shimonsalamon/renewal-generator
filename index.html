@@ -10,9 +10,10 @@
 
 <body>
   <div class="form-container">
+    <div class="form-header">
+      421-A Lease Renewal Generator
+    </div>
     <form>
-      <h2>421-A Lease Renewal Generator</h2>
-
       <section>
         <div class="row">
           <div class="field">
@@ -143,16 +144,17 @@
       </section>
 
     </form>
+    <div class="button-container">
+      <p class="disclaimer">By clicking this button, you acknowledge and agree that you are solely responsible for the
+        accuracy and completeness of the information provided, and that you waive any right to hold the site owner
+        liable
+        for any errors, omissions, or damages resulting from the use of this service.</p>
+      <button type="button" onclick="fillForm()">Generate PDF</button>
+      <span class="download" onclick="downloadPDF()">Download PDF</span>
+    </div>
   </div>
   <div class="embed-container">
     <embed id="pdf" src="rtp-8-06-2023-fillable.pdf" type="application/pdf" />
-  </div>
-  <div class="button-container">
-    <p class="disclaimer">By clicking this button, you acknowledge and agree that you are solely responsible for the
-      accuracy and completeness of the information provided, and that you waive any right to hold the site owner liable
-      for any errors, omissions, or damages resulting from the use of this service.</p>
-    <button type="button" onclick="fillForm()">Generate PDF</button>
-    <span class="download" onclick="downloadPDF()">Download PDF</span>
   </div>
   <div class="copyright-container">
     <p>&copy;
