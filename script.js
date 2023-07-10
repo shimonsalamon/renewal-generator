@@ -47,6 +47,7 @@ async function fillForm() {
     ? Number(getFieldValue("lowerRent"))
     : null;
   const securityDeposit = Number(getFieldValue("securityDeposit"));
+  const depositType = getRadioGroupValue("depositType");
   const airConditionerFee = Number(getFieldValue("airConditioner"));
   const four21AFee = Number(getFieldValue("four21ACharge"));
   const appliancesFee = Number(getFieldValue("appliances"));
@@ -84,9 +85,27 @@ async function fillForm() {
   const twoYearRentYear2 = preferentialRentCheckbox.checked ? twoYearPreferentialAmountTotalYear2 : twoYearAmountTotalYear2;
 
   // Calculate additional security deposit
-  const oneYearAdditionalSecurityDeposit = oneYearAmountTotal - securityDeposit;
-  const twoYearAdditionalSecurityDepositYear1 = twoYearAmountTotalYear1 - securityDeposit;
-  const twoYearAdditionalSecurityDepositYear2 = twoYearAmountTotalYear2 - securityDeposit - twoYearAdditionalSecurityDepositYear1;
+  const additionalSecurityDeposit = {
+    preferential: {
+      oneYear: oneYearRent - securityDeposit,
+      twoYearYear1: twoYearRentYear1 - securityDeposit,
+      twoYearYear2: twoYearRentYear2 - securityDeposit - (twoYearRentYear1 - securityDeposit)
+    },
+    legal: {
+      oneYear: oneYearAmountTotal - securityDeposit,
+      twoYearYear1: twoYearAmountTotalYear1 - securityDeposit,
+      twoYearYear2: twoYearAmountTotalYear2 - securityDeposit - (twoYearAmountTotalYear1 - securityDeposit)
+    },
+    percentage: {
+      oneYear: securityDeposit * oneYearIncreasePercent,
+      twoYearYear1: securityDeposit * twoYearIncreasePercentYear1,
+      twoYearYear2: (securityDeposit + (securityDeposit * twoYearIncreasePercentYear1)) * twoYearIncreasePercentYear2
+    }
+  };
+  
+  const oneYearAdditionalSecurityDeposit = additionalSecurityDeposit[depositType].oneYear;
+  const twoYearAdditionalSecurityDepositYear1 = additionalSecurityDeposit[depositType].twoYearYear1;
+  const twoYearAdditionalSecurityDepositYear2 = additionalSecurityDeposit[depositType].twoYearYear2;
 
   // Calculate renewal lease dates based on leaseExpirationDate
   const renewalStartDate = new Date(leaseExpirationDate);
@@ -222,6 +241,16 @@ function toggleFieldState(checkboxState, field) {
 // Utility function to retrieve the value of an input field
 function getFieldValue(id) {
   return document.getElementById(id).value;
+}
+
+// Utility function to retrieve the value of a radio group
+function getRadioGroupValue(name) {
+  const radioGroup = document.getElementsByName(name);
+  for (let i = 0; i < radioGroup.length; i++) {
+    if (radioGroup[i].checked) {
+      return radioGroup[i].value;
+    }
+  }
 }
 
 // Utility function to set the value of a text field in the PDF form

@@ -107,7 +107,7 @@ h3 {
   color: #0009;
 }
 
-.input:not([type="checkbox"]) {
+.input:not([type="checkbox"]):not([type="radio"]) {
   width: 100%;
   padding: 6px;
   border-radius: 4px 4px 0 0;
@@ -118,12 +118,12 @@ h3 {
   background-color: #0000000a;
 }
 
-.input:not([type="checkbox"]):focus {
+.input:not([type="checkbox"]):not([type="radio"]):focus {
   border-bottom: 2px solid #35465c;
   outline: none;
 }
 
-.input:not([type="checkbox"]):disabled {
+.input:not([type="checkbox"]):not([type="radio"]):disabled {
   border: none;
   color: #00000061;
   background-color: #00000005;
@@ -136,6 +136,29 @@ h3 {
   border-radius: 6px;
   border: 1px solid #ccc;
   box-sizing: border-box;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+
+}
+
+.radio-group .radio {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+.radio-group .radio input[type="radio"] {
+  margin-right: 10px;
+}
+
+.radio-group  label {
+  font-size: 13px;
+  color: #000000de;
 }
 
 .checkbox-label {
@@ -195,6 +218,10 @@ button:hover {
 @media screen and (max-width: 1025px) {
   .field {
     width: 100%;
+  }
+
+  .radio-group {
+    flex-direction: column;
   }
 }
 
