@@ -8,100 +8,88 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
   <script src="https://unpkg.com/pdf-lib@1.17.0"></script>
   <script src="https://unpkg.com/downloadjs@1.4.7"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(() => {
-          console.log('Service Worker registered');
-        })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
-        });
-    }
   </script>
 </head>
 
 <body>
+  
+  <!-- <script src="script.js"></script> -->
+  <script type="module" src="index.js"></script>
+  <script src="./bundle.js"></script>
+
   <div class="form-container">
     <div class="form-header">
       421-A Lease Renewal Generator
     </div>
     <form>
-      <section>
+      <md-outlined-card>
         <div class="row">
           <div class="field">
             <label for="date" class="label">Lease Date:</label>
             <input type="date" id="date" class="input">
           </div>
-      </section>
+        </div>
+      </md-outlined-card>
 
-      <section>
+      <md-outlined-card >
         <h3>Tenant Info</h3>
         <div class="row">
-          <div class="field">
-            <label for="tenantName1" class="label">Name (Line 1):</label>
-            <input type="text" id="tenantName1" class="input">
-          </div>
-          <div class="field">
-            <label for="tenantName2" class="label">Name (Line 2):</label>
-            <input type="text" id="tenantName2" class="input">
-          </div>
+
+          <md-filled-text-field class="field" id="tenantName1" label="Name (Line 1)" >
+          </md-filled-text-field>
+
+          <md-filled-text-field class="field" id="tenantName2" label="Name (Line 2)" >
+          </md-filled-text-field>
         </div>
         <div class="row">
-          <div class="field">
-            <label for="tenantAddress1" class="label">Address (Line 1):</label>
-            <input type="text" id="tenantAddress1" class="input">
-          </div>
-          <div class="field">
-            <label for="tenantAddress2" class="label">Address (Line 2):</label>
-            <input type="text" id="tenantAddress2" class="input">
-          </div>
-        </div>
-      </section>
 
-      <section>
+          <md-filled-text-field class="field" id="tenantAddress1" label="Address (Line 1)" >
+          </md-filled-text-field>
+
+          <md-filled-text-field class="field" id="tenantAddress2" label="Address (Line 2)" >
+          </md-filled-text-field>
+        </div>
+      </md-outlined-card >
+
+      <md-outlined-card>
         <h3>Owner Info</h3>
         <div class="row">
-          <div class="field">
-            <label for="ownerName" class="label">Owner's Name:</label>
-            <input type="text" id="ownerName" class="input">
-          </div>
-          <div class="field">
-            <label for="ownerAddress1" class="label">Address (Line 1):</label>
-            <input type="text" id="ownerAddress1" class="input">
-          </div>
-          <div class="field">
-            <label for="ownerAddress2" class="label">Address (Line 2):</label>
-            <input type="text" id="ownerAddress2" class="input">
-          </div>
-        </div>
-      </section>
 
-      <section>
+          <md-filled-text-field class="field" id="ownerName" label="Owner's Name" >
+          </md-filled-text-field>
+
+          <md-filled-text-field class="field" id="ownerAddress1" label="Address (Line 1)" >
+          </md-filled-text-field>
+
+          <md-filled-text-field class="field" id="ownerAddress2" label="Address (Line 2)" >
+          </md-filled-text-field>
+
+        </div>
+      </md-outlined-card>
+
+      <md-outlined-card>
         <h3>Lease Details</h3>
         <div class="row">
           <div class="field">
             <label for="leaseExpirationDate" class="label">Current Lease Expiration Date:</label>
             <input type="date" id="leaseExpirationDate" class="input">
           </div>
-          <div class="field">
-            <label for="currentRent" class="label">Current Legal Rent Amount:</label>
-            <input type="number" id="currentRent" class="input">
-          </div>
-          <div class="field">
-            <label for="securityDeposit" class="label">Current Security Deposit:</label>
-            <input type="number" id="securityDeposit" class="input">
-          </div>
+
+          <md-filled-text-field class="field" id="currentRent" label="Current Legal Rent Amount" type="number">
+          </md-filled-text-field>
+
+          <md-filled-text-field class="field" id="securityDeposit" label="Current Security Deposit" type="number">
+          </md-filled-text-field>
         </div>
         <div class="row">
           <div class="field">
             <label for="preferentialRent" class="label">Your tenant pays a Preferential Rent?</label>
             <input type="checkbox" id="preferentialRent" class="input">
           </div>
-          <div class="field">
-            <label for="lowerRent" class="label">Current Preferential Rent Amount:</label>
-            <input type="number" id="lowerRent" class="input" disabled>
-          </div>
+
+          <md-filled-text-field class="field" id="lowerRent" label="Current Preferential Rent Amount" type="number">
+          </md-filled-text-field>
+          
           <div class="field">
             <label for="preferentialRider" class="label">Preferential Rider Attached?</label>
             <input type="checkbox" id="preferentialRider" class="input" disabled>
@@ -126,44 +114,40 @@
             </div>
           </div>
         </div>
-      </section>
+      </md-outlined-card>
 
-      <section>
+      <md-outlined-card>
         <h3>Separate Charges (if any)</h3>
         <div class="row">
-          <div class="field">
-            <label for="airConditioner" class="label">Air Conditioner:</label>
-            <input type="number" id="airConditioner" class="input">
-          </div>
-          <div class="field">
-            <label for="four21ACharge" class="label">421a (2.2%):</label>
-            <input type="number" id="four21ACharge" class="input">
-          </div>
 
-          <div class="field">
-            <label for="appliances" class="label">Appliances:</label>
-            <input type="number" id="appliances" class="input">
-          </div>
+          <md-filled-text-field class="field" id="airConditioner" label="Air Conditioner" type="number">
+          </md-filled-text-field>
+
+          <md-filled-text-field class="field" id="four21ACharge" label="421a (2.2%)" type="number">
+          </md-filled-text-field>
+
+          <md-filled-text-field class="field" id="appliances" label="Appliances" type="number">
+          </md-filled-text-field>
+
         </div>
         <div class="row">
-          <div class="field">
-            <label for="otherChargeName" class="label">Other (name):</label>
-            <input type="text" id="otherChargeName" class="input">
-          </div>
-          <div class="field">
-            <label for="otherChargeAmount" class="label">Other (amount):</label>
-            <input type="number" id="otherChargeAmount" class="input">
-          </div>
-        </div>
-      </section>
 
-      <section>
+          <md-filled-text-field class="field" id="otherChargeName" label="Other (name)" >
+          </md-filled-text-field>
+
+          <md-filled-text-field class="field" id="otherChargeAmount" label="Other (amount)" type="number">
+          </md-filled-text-field>
+
+        </div>
+      </md-outlined-card>
+
+      <md-outlined-card>
         <h3>Additional Details</h3>
         <div class="row">
-          <div class="field">
-            <label for="scrieDrieRent" class="label">Lower SCRIE or DRIE Rent (if any):</label>
-            <input type="text" id="scrieDrieRent" class="input">
-          </div>
+
+          <md-filled-text-field class="field" id="scrieDrieRent" label="Lower SCRIE or DRIE Rent (if any)" type="number">
+          </md-filled-text-field>
+
           <div class="field">
             <label for="sprinklerSystem" class="label">Does your property have a sprinkler?</label>
             <input type="checkbox" id="sprinklerSystem" class="input">
@@ -173,7 +157,7 @@
             <input type="date" id="lastInspected" class="input" disabled>
           </div>
         </div>
-      </section>
+      </md-outlined-card>
 
     </form>
     <div class="button-container">
@@ -181,8 +165,8 @@
         accuracy and completeness of the information provided, and that you waive any right to hold the site owner
         liable
         for any errors, omissions, or damages resulting from the use of this service.</p>
-      <button type="button" onclick="fillForm()">Generate PDF</button>
-      <span class="download" onclick="downloadPDF()">Download PDF</span>
+      <md-filled-button type="button" onclick="fillForm()">Generate PDF</md-filled-button>
+      <md-text-button  class="download" onclick="downloadPDF()">Download PDF</span>
     </div>
   </div>
   <div class="embed-container">
@@ -196,6 +180,7 @@
     </p>
   </div>
   <script src="script.js"></script>
+
 </body>
 
 </html>

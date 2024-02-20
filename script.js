@@ -102,7 +102,7 @@ async function fillForm() {
       twoYearYear2: (securityDeposit + (securityDeposit * twoYearIncreasePercentYear1)) * twoYearIncreasePercentYear2
     }
   };
-  
+
   const oneYearAdditionalSecurityDeposit = additionalSecurityDeposit[depositType].oneYear;
   const twoYearAdditionalSecurityDepositYear1 = additionalSecurityDeposit[depositType].twoYearYear1;
   const twoYearAdditionalSecurityDepositYear2 = additionalSecurityDeposit[depositType].twoYearYear2;

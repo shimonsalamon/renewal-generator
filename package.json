@@ -1,0 +1,17 @@
+{
+  "name": "renewal-generator",
+  "version": "1.0.0",
+  "description": "This is a simple web application that generates renewal offers for the New York State Division of Housing and Community Renewal (DHCR). It allows you to enter basic information about the tenant, lease expiration, and rent amount, and then generates a renewal offer that includes all necessary calculations and allowed increases.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@material/web": "^1.2.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^4.12.0"
+  }
+}

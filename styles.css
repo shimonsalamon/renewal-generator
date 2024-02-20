@@ -1,15 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Open%20Sans:wght@400;500;700&display=swap");
+
+:root,
+:host {
+  --md-sys-color-background: #f7faf7;
+  --md-sys-color-on-background: #191c1b;
+  --md-sys-color-surface: #f7faf7;
+  --md-sys-color-surface-dim: #d8dbd8;
+  --md-sys-color-surface-bright: #f7faf7;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #f2f4f2;
+  --md-sys-color-surface-container: #eceeec;
+  --md-sys-color-surface-container-high: #e6e9e6;
+  --md-sys-color-surface-container-highest: #e0e3e1;
+  --md-sys-color-on-surface: #191c1b;
+  --md-sys-color-surface-variant: #dae5e1;
+  --md-sys-color-on-surface-variant: #3f4946;
+  --md-sys-color-inverse-surface: #2d3130;
+  --md-sys-color-inverse-on-surface: #eff1ef;
+  --md-sys-color-outline: #6f7976;
+  --md-sys-color-outline-variant: #bec9c5;
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-surface-tint: #1c6a5d;
+  --md-sys-color-primary: #00453c;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #1e6b5e;
+  --md-sys-color-on-primary-container: #ffffff;
+  --md-sys-color-inverse-primary: #8cd4c4;
+  --md-sys-color-secondary: #49645d;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #d0ede5;
+  --md-sys-color-on-secondary-container: #364f4a;
+  --md-sys-color-tertiary: #423464;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #66578a;
+  --md-sys-color-on-tertiary-container: #ffffff;
+  --md-sys-color-error: #ba1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #ffdad6;
+  --md-sys-color-on-error-container: #410002;
+}
+
+/* :root,
+:host {
+  --md-sys-color-background: #101413;
+  --md-sys-color-on-background: #e0e3e1;
+  --md-sys-color-surface: #101413;
+  --md-sys-color-surface-dim: #101413;
+  --md-sys-color-surface-bright: #363a39;
+  --md-sys-color-surface-container-lowest: #0b0f0e;
+  --md-sys-color-surface-container-low: #191c1b;
+  --md-sys-color-surface-container: #1d201f;
+  --md-sys-color-surface-container-high: #272b29;
+  --md-sys-color-surface-container-highest: #323634;
+  --md-sys-color-on-surface: #e0e3e1;
+  --md-sys-color-surface-variant: #3f4946;
+  --md-sys-color-on-surface-variant: #bec9c5;
+  --md-sys-color-inverse-surface: #e0e3e1;
+  --md-sys-color-inverse-on-surface: #2d3130;
+  --md-sys-color-outline: #89938f;
+  --md-sys-color-outline-variant: #3f4946;
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-surface-tint: #8cd4c4;
+  --md-sys-color-primary: #8cd4c4;
+  --md-sys-color-on-primary: #003730;
+  --md-sys-color-primary-container: #005045;
+  --md-sys-color-on-primary-container: #a4eddd;
+  --md-sys-color-inverse-primary: #1c6a5d;
+  --md-sys-color-secondary: #b0ccc5;
+  --md-sys-color-on-secondary: #1b3530;
+  --md-sys-color-secondary-container: #28423c;
+  --md-sys-color-on-secondary-container: #bad6cf;
+  --md-sys-color-tertiary: #d0bdf8;
+  --md-sys-color-on-tertiary: #362858;
+  --md-sys-color-tertiary-container: #4e3f70;
+  --md-sys-color-on-tertiary-container: #e8dbff;
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+} */
+
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Open Sans", sans-serif;
   margin: 0;
   padding: 0;
   height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background-color: #fafafa;
+  background-color: var(--md-sys-color-surface-container);
 }
 
 .embed-container {
   padding: 18px;
+  padding-bottom: 0;
 }
 
 embed {
@@ -22,24 +107,23 @@ embed {
 .form-container {
   overflow: hidden;
   margin: 18px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0;
+  background-color: var(--md-sys-color-background);
   border-radius: 16px;
-  /* border: #323639 solid 1px; */
-  border: rgba(0, 0, 0, 0.2) solid 1px;
   display: grid;
   grid-template-rows: min-content 1fr min-content;
 }
 
 .copyright-container {
+  padding: 6px;
   text-align: center;
   font-size: 14px;
   grid-column: span 2;
-  color: #fff;
-  background-color: #35465c;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .copyright-container a {
-  color: #fff;
+  color: var(--md-sys-color-on-surface-variant);
   text-decoration: none;
 }
 
@@ -50,13 +134,12 @@ embed {
 form {
   overflow: auto;
   padding: 20px 20px 0 20px;
-
 }
 
 .button-container {
-  background-color: #ffffff;
+  background-color: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface-variant);
   padding: 12px 24px;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .form-header {
@@ -68,34 +151,24 @@ form {
   font-weight: 500;
 }
 
-section {
-  margin-bottom: 30px;
+md-outlined-card {
   padding: 20px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  border: rgba(0, 0, 0, 0.2) solid 1px;
-  max-width: 850px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 950px;
+  margin: 0 auto 30px;
 }
 
 h3 {
   margin-top: 0;
   margin-bottom: 12px;
   font-weight: 500;
-  color: #000000de;
+  color: var(--md-sys-color-on-surface);
 }
 
 .row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-
-.field {
-  width: 33.3%;
-  padding: 0 10px;
-  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding-bottom: 10px;
 }
 
 .label {
@@ -142,7 +215,6 @@ h3 {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
-
 }
 
 .radio-group .radio {
@@ -156,7 +228,7 @@ h3 {
   margin-right: 10px;
 }
 
-.radio-group  label {
+.radio-group label {
   font-size: 13px;
   color: #000000de;
 }
@@ -171,31 +243,18 @@ h3 {
   font-size: 12px;
   text-align: center;
   text-align: justify;
-  color: #646464;
   margin-bottom: 18px;
 }
 
 button {
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   /* background-color: #3f51b5; */
   color: white;
   border: none;
   border-radius: 25px;
   cursor: pointer;
   font-size: 16px;
-}
-
-.download {
-  color: #1a73e8;
-  text-decoration: none;
-  font-size: 14px;
-  padding: 10px 20px;
-}
-
-.download:hover {
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 button:hover {
@@ -210,14 +269,14 @@ button:hover {
 }
 
 @media screen and (max-width: 1400px) {
-  .field {
-    width: 50%;
+  .row {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media screen and (max-width: 1025px) {
-  .field {
-    width: 100%;
+  .row {
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .radio-group {
