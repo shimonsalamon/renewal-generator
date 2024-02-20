@@ -3,6 +3,26 @@ const today = new Date();
 const formattedDate = today.toLocaleDateString("en-CA");
 document.getElementById("date").value = formattedDate;
 
+// check for theme preference in localStorage or the browser preferences
+const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+let currentTheme = localStorage.getItem("theme");
+
+// If there's no theme set in localStorage, use the browser preference
+if (currentTheme === null) {
+  currentTheme = prefersDarkScheme.matches ? "dark" : "light";
+}
+
+// Get the icon element
+const themeIcon = document.querySelector('.theme-icon');
+
+// Add or remove the "dark-theme" class based on the theme
+if (currentTheme === "dark") {
+  document.body.classList.add("dark-theme");
+  themeIcon.textContent = "light_mode"; // Set the icon to dark mode
+} else {
+  document.body.classList.remove("dark-theme");
+  themeIcon.textContent = "dark_mode"; // Set the icon to light mode
+}
 // Get the checkbox and related fields
 const preferentialRentCheckbox = document.getElementById("preferentialRent");
 const sprinklerSystemCheckbox = document.getElementById("sprinklerSystem");
@@ -284,4 +304,21 @@ function formatDate(date) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${month}/${day}/${year}`;
+}
+
+// function to toggle the theme
+function toggleTheme() {
+  // Get the icon element
+  const themeIcon = document.querySelector('.theme-icon');
+
+  if (currentTheme === "dark") {
+    document.body.classList.remove("dark-theme");
+    currentTheme = "light";
+    themeIcon.textContent = "dark_mode";
+  } else {
+    document.body.classList.add("dark-theme");
+    currentTheme = "dark";
+    themeIcon.textContent = "light_mode"; 
+  }
+  localStorage.setItem("theme", currentTheme);
 }
