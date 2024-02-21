@@ -166,10 +166,16 @@ md-outlined-card {
 }
 
 h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-top: 0;
   margin-bottom: 12px;
   font-weight: 500;
-  color: var(--md-sys-color-on-surface);
+  color: var(--md-sys-color-on-surface-variant);
+  & md-icon {
+    color: var(--md-sys-color-primary);
+  }
 }
 
 .row {
