@@ -91,24 +91,30 @@
           </md-filled-text-field>
         </div>
         <div class="row">
-          <div class="field">
-            <label for="preferentialRent" class="label">Your tenant pays a Preferential Rent?</label>
-            <input type="checkbox" id="preferentialRent" class="input">
+          <div class="field column">
+            <label>
+              <md-checkbox
+                id="preferentialRent"
+                touch-target="wrapper"></md-checkbox>Your tenant pays a Preferential Rent?
+            </label>
           </div>
 
           <md-filled-text-field class="field" id="lowerRent" label="Current Preferential Rent Amount" type="number">
           </md-filled-text-field>
           
-          <div class="field">
-            <label for="preferentialRider" class="label">Preferential Rider Attached?</label>
-            <input type="checkbox" id="preferentialRider" class="input" disabled>
+          <div class="field column">
+            <label>
+              <md-checkbox
+                id="preferentialRider"
+                touch-target="wrapper" disabled></md-checkbox>Preferential Rider Attached?
+            </label>
           </div>
         </div>
         <div class="row">
           <div class="field">
             <label class="label">How to charge additional security deposit?</label>
 
-            <div class="radio-group" role="radiogroup">
+            <div class="column" role="radiogroup">
               <div class="radio-label">
                 <md-radio
                   id="preferential-radio"
@@ -181,10 +187,14 @@
           <md-filled-text-field class="field" id="scrieDrieRent" label="Lower SCRIE or DRIE Rent (if any)" type="number">
           </md-filled-text-field>
 
-          <div class="field">
-            <label for="sprinklerSystem" class="label">Does your property have a sprinkler?</label>
-            <input type="checkbox" id="sprinklerSystem" class="input">
+          <div class="field column">
+            <label>
+              <md-checkbox
+                id="sprinklerSystem"
+                touch-target="wrapper"></md-checkbox>Does your property have a sprinkler?
+            </label>
           </div>
+
           <div class="field">
             <label for="lastInspected" class="label">Last Inspected:</label>
             <input type="date" id="lastInspected" class="input" disabled>

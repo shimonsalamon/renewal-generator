@@ -194,6 +194,11 @@ h3 {
   color: var(--md-sys-color-on-surface-variant);
 }
 
+label {
+  color: var(--md-sys-color-on-surface-variant);
+  gap: 0;
+}
+
 .input:not([type="checkbox"]):not([type="radio"]) {
   width: 100%;
   padding: 6px;
@@ -224,9 +229,11 @@ h3 {
   box-sizing: border-box;
 }
 
-.radio-group {
+.column {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  line-height: 48px;
 }
 
 .radio-label {
